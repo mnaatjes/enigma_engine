@@ -1,0 +1,38 @@
+{
+  "name": "enigma_engine",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "node dist/index.js",
+    "test": "vitetest",
+    "test:run": "vitetest run",
+    "test:ui": "vitetest --ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mnaatjes/enigma_engine.git"
+  },
+  "keywords": [
+    "enigma",
+    "enigma machine",
+    "encryption"
+  ],
+  "author": "Michael Naatjes",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/mnaatjes/enigma_engine/issues"
+  },
+  "homepage": "https://github.com/mnaatjes/enigma_engine#readme",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  }
+}
