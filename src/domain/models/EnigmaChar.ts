@@ -1,4 +1,8 @@
 /**
+ * @file src/domain/models/EnigmaChar.ts
+ */
+import type { EnigmaLetter, AlphabetIndex } from "../types/EnigmaTypes.js";
+/**
  * EnigmaChar is a Domain Value Object representing a single character in the Enigma system.
  * It encapsulates the relationship between a letter (A-Z) and its numeric index (0-25).
  * 
@@ -38,15 +42,15 @@ export class EnigmaChar {
   /**
    * Returns the 0-indexed position of the character (0-25).
    */
-  public get index(): number {
-    return this._index;
+  public get index(): AlphabetIndex {
+    return this._index as AlphabetIndex;
   }
 
   /**
    * Returns the uppercase letter representation of the character.
    */
-  public get letter(): string {
-    return String.fromCharCode(65 + this._index);
+  public get letter(): EnigmaLetter {
+    return String.fromCharCode(65 + this._index) as EnigmaLetter;
   }
 
   /**
