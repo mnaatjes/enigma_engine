@@ -12,7 +12,7 @@ export class PlugPair{
     private readonly _first: EnigmaChar;
     private readonly _second: EnigmaChar;
 
-    constructor(first: EnigmaChar, second: EnigmaChar){
+    private constructor(first: EnigmaChar, second: EnigmaChar){
         if(first.equals(second)){
             throw new Error(`A PlugPair cannot connect a letter to itself: ${first.letter}`)
         }
@@ -41,9 +41,25 @@ export class PlugPair{
 
     /**
      * Returns pair as tuple of EnigmaLetters
-     * @returns {Array<EnigmaLetter,EnigmaLetter>}
      */
     public get letters(): [EnigmaLetter, EnigmaLetter] {
         return [this._first.letter, this._second.letter];
+    }
+
+    /**
+     * @static
+     */
+    public static fromLetters(l1:string, l2:string): PlugPair {
+        return new PlugPair(
+            EnigmaChar.fromLetter(l1),
+            EnigmaChar.fromLetter(l2)
+        );
+    }
+
+    /**
+     * @static
+     */
+    public static fromChars(c1:EnigmaChar, c2:EnigmaChar): PlugPair {
+        return new PlugPair(c1, c2);
     }
 }
