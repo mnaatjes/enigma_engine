@@ -78,3 +78,7 @@ Thumbs.db
 .project
 .classpath
 .settings/
+
+# agents and scripts
+.agents/
+.scripts/
