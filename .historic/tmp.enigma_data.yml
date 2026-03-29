@@ -1,0 +1,84 @@
+# .historic/tmp.enigma_data.yml
+# Temporary data store for raw Enigma historical research.
+# Derived from 12 distinct sources covering:
+# - Mechanical stepping (M3, M4, Abwehr G, Railway, Swiss K)
+# - Electrical signal paths (9-step processing, bi-directional switching)
+# - Cryptanalytic breakthroughs (Rejewski, Turing, Welchman)
+# - Service procedures (Heer, Luftwaffe, Kriegsmarine)
+# - Algorithmic implementations (Python/Software logic)
+
+metadata:
+  version: 1.2.0
+  last_updated: 2026-03-29
+  goal: "Definitive 'Code of Law' for the Enigma Engine implementation."
+
+sources:
+  - id: HAMER_VAR_98
+    title: "Enigma Variations: An Extended Family of Machines"
+  - id: RIJMENANTS_TECH
+    title: "Enigma Tech Data"
+  - id: ENCODER_PY
+    title: "Enigma Encoder (Python Implementation)"
+    reliability: High
+    notes: "Provides explicit algorithmic logic for double-stepping and ring setting offsets."
+
+categories:
+  mechanical_stepping:
+    - rule_id: STEP_TEMPORAL
+      description: "Step-then-Encrypt Rule"
+      details: "The rotors advance IMMEDIATELY upon key depression, BEFORE the electrical signal is sent through the circuit."
+    - rule_id: STEP_ENIGMA_M3
+      description: "Standard M3 Stepping (Double-Stepping)"
+      details: "If the middle rotor is at its notch, the next keystroke advances both the middle and left rotors. This results in the middle rotor stepping twice in consecutive keystrokes."
+      logic_pattern: |
+        - Right rotor always steps.
+        - If Right rotor was at notch, Middle rotor steps.
+        - ELSE IF Middle rotor is at its own notch, BOTH Middle and Left rotors step (Double Step).
+
+  electrical_signal_path:
+    - rule_id: SIG_9_STEP_SEQUENCE
+      description: "9-Step Data Processing Cycle"
+      steps:
+        1: "Plugboard (Forward)"
+        2: "Rotor 1 (Right - Forward)"
+        3: "Rotor 2 (Middle - Forward)"
+        4: "Rotor 3 (Left - Forward)"
+        5: "Reflector (UKW)"
+        6: "Rotor 3 (Left - Reverse)"
+        7: "Rotor 2 (Middle - Reverse)"
+        8: "Rotor 1 (Right - Reverse)"
+        9: "Plugboard (Reverse)"
+    - rule_id: SIG_ROTOR_TRANSFORM
+      description: "Mathematical Transformation (Offset Logic)"
+      formula: |
+        - Forward: OutputIndex = (Wiring[(InputIndex + Offset) % 26] - Offset) % 26
+        - Backward: OutputIndex = (Wiring.indexOf(InputIndex + Offset) - Offset) % 26
+        - Offset = (PositionIndex - RingSettingIndex)
+      source_id: ENCODER_PY
+
+  historical_constants:
+    - component: "ETW (Military)"
+      wiring: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    - rotors:
+        I: { wiring: "EKMFLGDQVZNTOWYHXUSPAIBRCJ", notch: "Q" }
+        II: { wiring: "AJDKSIRUXBLHWTMCQGZNPYFVOE", notch: "E" }
+        III: { wiring: "BDFHJLCPRTXVZNYEIWGAKMUSQO", notch: "V" }
+        IV: { wiring: "ESOVPZJAYQUIRHXLNFTGKDCMWB", notch: "J" }
+        V: { wiring: "VZBRGITYUPSDNHLXAWMJQOFECK", notch: "Z" }
+    - reflectors:
+        B: "YRUHQSLDPXNGOKMIEBFZCWVJAT"
+        C: "FVPJIAOYEDRZXWGCTKUQSBNMHL"
+
+  domain_definitions:
+    - entity: "Rotor"
+      properties: ["Wiring", "Notch", "Position", "RingSetting"]
+    - entity: "Plugboard"
+      properties: ["Pairs"]
+    - entity: "EnigmaMachine"
+      properties: ["RotorStack", "Plugboard", "Reflector"]
+
+  resolved_discrepancies:
+    - issue: "Ring Setting Implementation"
+      resolution: "Software models often pre-shift the wiring string by the ring setting offset, which is mathematically equivalent to the (Pos - Ring) offset logic."
+    - issue: "Double Stepping Trigger"
+      resolution: "Confirmed: The middle rotor's own notch is the trigger for the third (left) rotor and its own second step."

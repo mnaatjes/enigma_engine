@@ -1,0 +1,145 @@
+# Enigma Engine: Centralized Definitions & Data Registry
+# This file contains all static physical and logical definitions for the Enigma ecosystem.
+
+metadata:
+  version: 1.0.0
+  last_updated: 2026-03-29
+  target_standard: "Kriegsmarine & Wehrmacht Historical Sets"
+
+machine_models:
+  - id: "ENIGMA_I"
+    name: "Enigma I (M3 Army/Air Force)"
+    rotor_slots: 3
+    etw_type: "MILITARY"
+    reflector_type: "WIDE"
+    display_convention: "NUMBERS" # 01-26
+    standard_rotors: ["I", "II", "III", "IV", "V"]
+
+  - id: "KRIEGSMARINE_M3"
+    name: "Naval Enigma M3"
+    rotor_slots: 3
+    etw_type: "MILITARY"
+    reflector_type: "WIDE"
+    display_convention: "LETTERS" # A-Z
+    standard_rotors: ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"]
+
+  - id: "KRIEGSMARINE_M4"
+    name: "Naval Enigma M4"
+    rotor_slots: 4
+    etw_type: "MILITARY"
+    reflector_type: "THIN"
+    display_convention: "LETTERS"
+    standard_rotors: ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"]
+    extra_rotors: ["BETA", "GAMMA"]
+
+  - id: "RAILWAY_ROCKET"
+    name: "German Railway (Rocket)"
+    rotor_slots: 3
+    etw_type: "COMMERCIAL"
+    reflector_type: "SETTABLE"
+    display_convention: "LETTERS"
+    standard_rotors: ["RAILWAY_I", "RAILWAY_II", "RAILWAY_III"]
+
+rotors:
+  # Military Rotors (I-V)
+  - id: "I"
+    model: "M3/M4"
+    wiring: "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
+    notches: ["Q"]
+  - id: "II"
+    model: "M3/M4"
+    wiring: "AJDKSIRUXBLHWTMCQGZNPYFVOE"
+    notches: ["E"]
+  - id: "III"
+    model: "M3/M4"
+    wiring: "BDFHJLCPRTXVZNYEIWGAKMUSQO"
+    notches: ["V"]
+  - id: "IV"
+    model: "M3/M4"
+    wiring: "ESOVPZJAYQUIRHXLNFTGKDCMWB"
+    notches: ["J"]
+  - id: "V"
+    model: "M3/M4"
+    wiring: "VZBRGITYUPSDNHLXAWMJQOFECK"
+    notches: ["Z"]
+
+  # Naval Rotors (VI-VIII)
+  - id: "VI"
+    model: "M3/M4 Naval"
+    wiring: "JPGVOUMFYQBENHZRDKASXLICTW"
+    notches: ["Z", "M"]
+  - id: "VII"
+    model: "M3/M4 Naval"
+    wiring: "NZJHGRCXMYSWBOUFAIVLPEKQDT"
+    notches: ["Z", "M"]
+  - id: "VIII"
+    model: "M3/M4 Naval"
+    wiring: "FKQHTLXOCBJSPDZRAMEWNIUYGV"
+    notches: ["Z", "M"]
+
+  # Special Fourth Rotors (M4 Beta/Gamma)
+  - id: "BETA"
+    model: "M4 (Zusatzwalze)"
+    wiring: "LEYJVCNIXWPBQMDRTAKZGFUHOS"
+    notches: [] # Stationary
+  - id: "GAMMA"
+    model: "M4 (Zusatzwalze)"
+    wiring: "FSOKANUERHMBTIYCWLQPZXVGJD"
+    notches: [] # Stationary
+
+reflectors:
+  - id: "UKW-A"
+    name: "Reflector A"
+    wiring: "EJMZALYXVBWFCRQUONTSPIKHGD"
+  - id: "UKW-B"
+    name: "Reflector B (Wide)"
+    wiring: "YRUHQSLDPXNGOKMIEBFZCWVJAT"
+  - id: "UKW-C"
+    name: "Reflector C (Wide)"
+    wiring: "FVPJIAOYEDRZXWGCTKUQSBNMHL"
+  - id: "UKW-B-THIN"
+    name: "Reflector B (Thin - M4)"
+    wiring: "ENKQAUYWJICOPBLMDXZVFTHRGS"
+  - id: "UKW-C-THIN"
+    name: "Reflector C (Thin - M4)"
+    wiring: "RDOBJNTKVEHMLFCWZAXGYIPSUQ"
+
+entry_wheels:
+  - id: "MILITARY"
+    name: "Standard Military (Alpha)"
+    wiring: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  - id: "COMMERCIAL"
+    name: "Commercial/Railway (QWERTZ)"
+    wiring: "QWERTZUIOASDFGHJKPYXCVBNML"
+
+physical_interfaces:
+  keyboard:
+    layout: "QWERTZ"
+    rows:
+      - "QWERTZUIOP"
+      - "ASDFGHJK"
+      - "PYXCVBNM"
+  lampboard:
+    mapping: "ALPHABETICAL" # Typically matches the keyboard layout visually but logical output is 0-25
+  plugboard:
+    max_cables: 10
+    total_sockets: 26
+    reciprocal: true
+
+glossary_registry:
+  - term: "Walzenlage"
+    definition: "Rotor Selection and Order (e.g., I-V-III)."
+  - term: "Ringstellung"
+    definition: "Ring Setting; internal offset of the wiring core relative to the alphabet ring."
+  - term: "Grundstellung"
+    definition: "Initial rotor position (indicator) for message start."
+  - term: "Spruchschlüssel"
+    definition: "Message key; the secret start position for the actual content."
+  - term: "Umkehrwalze"
+    definition: "The reflector component (UKW)."
+  - term: "Eintrittswalze"
+    definition: "The entry wheel (ETW)."
+  - term: "Steckerbrett"
+    definition: "The plugboard."
+  - term: "Samiczki"
+    definition: "Females; a repeated letter in a message key enciphering to the same character twice."

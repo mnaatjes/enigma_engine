@@ -1,0 +1,104 @@
+# Enigma Engine: Definitive Operational Directives
+# This document serves as the single-source-of-truth for implementation.
+# Focus: Kriegsmarine (Navy) M3/M4 Logic.
+
+metadata:
+  version: 1.0.0
+  last_updated: 2026-03-29
+  standard: "Kriegsmarine (Letters A-Z, Alphabetical ETW)"
+
+core_concepts:
+  - name: "Signal (AlphabetIndex)"
+    historic_description: "The electrical voltage passing through a specific pin on the rotor's contact plate."
+    implementation_type: "Integer (0-25)"
+    mathematical_representation: "L ∈ {0, 1, ..., 25}"
+
+  - name: "Temporal Distinction (Step-then-Encrypt)"
+    historic_description: "The physical depression of a key triggers the mechanical pawls to move the rotors BEFORE the electrical circuit is completed."
+    implementation_directive: "The machine's step() logic must execute and complete before the signal transformation pipeline begins."
+
+  - name: "Signal Path (R-to-L-to-R)"
+    historic_description: "The journey of the signal from the keyboard through the scrambler and back to the lampboard."
+    sequence:
+      1: "Input (Keyboard)"
+      2: "Plugboard (Forward)"
+      3: "Entry Wheel (ETW - Forward)"
+      4: "Rotor Stack (Right -> Middle -> Left - Forward)"
+      5: "Reflector (UKW)"
+      6: "Rotor Stack (Left -> Middle -> Right - Backward)"
+      7: "Entry Wheel (ETW - Backward)"
+      8: "Plugboard (Reverse)"
+      9: "Output (Lampboard)"
+
+mechanical_components:
+  - name: "Eintrittswalze (ETW) / Entry Wheel"
+    historic_description: "The static interface between the plugboard and the rotating drums."
+    properties:
+      - "wiring: Array[26] (Alphabetical for Naval models: 0=0, 1=1...)"
+    methods:
+      - "forward(signal: AlphabetIndex): AlphabetIndex"
+      - "backward(signal: AlphabetIndex): AlphabetIndex"
+
+  - name: "Walzen / Rotors"
+    historic_description: "The primary rotating scrambling cylinders."
+    properties:
+      - "id: String (e.g., 'I', 'Beta')"
+      - "wiring: Array[26] (Internal core mapping)"
+      - "inverse_wiring: Array[26] (Pre-calculated for reverse pass)"
+      - "notch: Array[AlphabetIndex] (Positions triggering next rotor)"
+      - "position: AlphabetIndex (Current rotational state, 0-25)"
+      - "ring_setting: AlphabetIndex (Fixed internal displacement, 0-25)"
+    methods:
+      - "step(): void (Increments position % 26)"
+      - "is_at_notch(): boolean (Returns true if position matches any notch)"
+      - "forward(signal: AlphabetIndex): AlphabetIndex"
+      - "backward(signal: AlphabetIndex): AlphabetIndex"
+    formulae:
+      offset_calculation: "O = (position - ring_setting + 26) % 26"
+      forward_transform: "Output = (wiring[(signal + O) % 26] - O + 26) % 26"
+      backward_transform: "Output = (inverse_wiring[(signal + O) % 26] - O + 26) % 26"
+
+  - name: "Umkehrwalze (UKW) / Reflector"
+    historic_description: "A static end-plate that returns the signal in pairs, ensuring no letter maps to itself."
+    properties:
+      - "wiring: Array[26] (Must be involutory: if W[a]=b, then W[b]=a)"
+    methods:
+      - "reflect(signal: AlphabetIndex): AlphabetIndex"
+    constraints:
+      - "non_identity: W[i] ≠ i for all i"
+
+  - name: "Steckerbrett / Plugboard"
+    historic_description: "A manual patch panel for pairwise character transposition."
+    properties:
+      - "pairs: Map<AlphabetIndex, AlphabetIndex>"
+    methods:
+      - "swap(signal: AlphabetIndex): AlphabetIndex"
+    constraints:
+      - "reciprocity: if swap(a) == b, then swap(b) == a"
+
+logic_governance:
+  - name: "Stepping Logic (Standard M3/M4)"
+    rule_1: "Right Rotor always steps once per keystroke."
+    rule_2: "Middle Rotor steps if Right Rotor was at its notch."
+    rule_3: "Middle Rotor steps a SECOND time (Double-Step) if it is at its OWN notch."
+    rule_4: "Left Rotor steps if Middle Rotor was at its notch."
+    mechanical_fidelity_sequence: |
+      Let R, M, L be the rotors.
+      1. Check if M is at notch (for Double-Step and L-step).
+      2. Check if R is at notch (for M-step).
+      3. Always step R.
+      4. If M was at notch, step M AND step L.
+      5. Else if R was at notch, step M.
+
+  - name: "Window Letter"
+    historic_description: "The visual representation of the current Rotor Position."
+    mapping: "AlphabetIndex 0 -> 'A', 1 -> 'B', ..., 25 -> 'Z'"
+
+  - name: "Neutral Position"
+    historic_description: "The zero-alignment state."
+    definition: "Ring Setting 'A' (Index 0) means the wiring core is perfectly aligned with the alphabet tyre."
+
+cryptographic_invariants:
+  - "Reciprocity: encrypt(plaintext, settings) == ciphertext AND encrypt(ciphertext, settings) == plaintext"
+  - "Non-Identity: encrypt(char, settings) != char"
+  - "Periodicity: M3 cycle length is 16,900 (due to double-stepping) rather than 17,576."

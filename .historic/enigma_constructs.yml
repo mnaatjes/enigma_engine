@@ -1,0 +1,57 @@
+# Enigma Engine: Architectural Constructs & Domain Logic
+# This file tracks the internal logic structures devised to enforce the Code of Law.
+
+metadata:
+  version: 1.0.0
+  last_updated: 2026-03-29
+  objective: "Enforce Mechanical Fidelity through explicit Pin and Physics models."
+
+value_objects:
+  - name: "Pin"
+    purpose: "Represents the physical electrical contact index (0-25). Separates 'Electricity' from 'Information'."
+    logic:
+      - "Normalization: Handles circular arithmetic internally (e.g., -1 becomes 25)."
+      - "Immutability: Returns new Pin instances on shifts."
+    properties:
+      - "index: AlphabetIndex (The 0-indexed location of the electrical contact)"
+    methods:
+      - "fromIndex(raw: number): Pin (Factory with validation/normalization)"
+      - "shift(offset: number): Pin (Relative movement across the contact plate)"
+
+  - name: "EnigmaChar"
+    purpose: "The Human-to-Machine Translator. Used only at the Hexagon boundaries."
+    logic:
+      - "Mapping: Encapsulates A-Z letters to 0-25 indices."
+      - "Validation: Ensures only valid historical characters enter the system."
+    properties:
+      - "letter: EnigmaLetter"
+      - "index: AlphabetIndex"
+
+domain_services:
+  - name: "ScramblerPhysics"
+    purpose: "The centralized 'Universal Laws' of Enigma encryption. Ensures mathematical consistency across all rotors."
+    logic:
+      - "Golden Formula: Output = (Wiring[(Input + Position - Ring) % 26] - (Position - Ring)) % 26"
+      - "Encapsulation: Prevents logic duplication across Rotor, Reflector, and ETW components."
+    methods:
+      - "transform(inputPin, wiring, position, ringSetting): Pin"
+      - "inverseTransform(inputPin, wiring, position, ringSetting): Pin"
+
+component_roles:
+  - name: "Rotor"
+    responsibility: "State Container"
+    holds: ["Wiring Core", "Notch Pattern", "Current Position", "Ring Setting"]
+    executes: ["Reporting its notch state", "Updating its own position (stepping)"]
+    delegates: ["Electrical transformation to ScramblerPhysics"]
+
+  - name: "EnigmaMachine"
+    responsibility: "Aggregate Orchestrator"
+    executes:
+      - "Timing: Enforcing the 'Step-then-Encrypt' sequence."
+      - "Choreography: Passing the Pin through the 9-step signal path."
+      - "Stepping: Governing the Double-Step mechanical logic across the stack."
+
+architectural_invariants:
+  - "No raw 'numbers' in domain methods; use 'Pin' for electricity and 'AlphabetIndex' for configuration."
+  - "The 'Scrambler' never sees 'EnigmaChar'; it only sees 'Pin'."
+  - "All shifts are handled by the Pin object or ScramblerPhysics to prevent 'Modulo Bugs'."
