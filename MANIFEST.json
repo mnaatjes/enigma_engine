@@ -1,13 +1,46 @@
 {
   "metadata": {
     "description": "Consolidated project manifest from .agents configuration",
-    "sync_time": "2026-03-29T04:06:17.954470"
+    "sync_time": "2026-04-08T04:31:37.050538"
   },
   "adapters.agent": null,
+  "current": {
+    "metadata": {
+      "last_updated": "2026-04-08",
+      "focus": "Physics-First Decoupling Complete in Type Layer"
+    },
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Type Layer Refactor (Decoupling)",
+        "status": "COMPLETED",
+        "file": "src/domain/types/*",
+        "notes": "Split into PhysicsTypes.ts, HistoricalTypes.ts, PhysicsBlueprints.ts."
+      },
+      {
+        "id": 2,
+        "title": "Observability Refactor",
+        "status": "COMPLETED",
+        "file": "src/domain/types/ObservabilityTypes.ts",
+        "notes": "Implemented Discriminated Union for ComponentAddress using SlotIndex."
+      },
+      {
+        "id": 3,
+        "title": "State Layer Refactor",
+        "status": "COMPLETED",
+        "file": "src/domain/types/StateTypes.ts",
+        "notes": "Removed historical IDs from RotorState; added SlotIndex."
+      }
+    ],
+    "current_context": {
+      "active_component": "Domain Model Cleansing",
+      "next_step": "Refactor EntryWheel.ts to remove historical ID dependency."
+    }
+  },
   "domain.agent": null,
   "enigma.agent": {
     "project": "Enigma Engine",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "language": "TypeScript",
     "architecture": "Hexagonal (Ports & Adapters)",
     "methodology": "Domain-Driven Design (DDD)",
@@ -24,13 +57,16 @@
     "project_status": {
       "completed": [
         "Centralized \"Source of Truth\" in .historic/ (directives, definitions, constructs).",
-        "Formalized strict type system in EnigmaTypes.ts (AlphabetIndex union, ScramblerWiring).",
-        "Defined configuration contracts in ConfigurationTypes.ts (MachineSetup, Definitions)."
+        "Formalized \"Physics-First\" Decoupled Type System.",
+        "Split types into PhysicsTypes.ts (primitives) and HistoricalTypes.ts (identities).",
+        "Created PhysicsBlueprints.ts for ID-agnostic \"virgin\" component definitions.",
+        "Updated StateTypes.ts and ObservabilityTypes.ts to use physical addresses (SlotIndex).",
+        "Implemented EnigmaChar and Pin Value Objects with comprehensive tests."
       ],
       "current_focus": [
-        "Re-implementing Domain Entities (Rotor, Plugboard, ETW, UKW) to use AlphabetIndex and Pin.",
-        "Implementing the ScramblerPhysics domain service for centralized transformation logic.",
-        "Developing the EnigmaMachine Aggregate to orchestrate stepping and signal path."
+        "Refactoring EntryWheel.ts to be \"Virgin\" (ID-agnostic).",
+        "Implementing the ComponentFactory and HistoricalRegistry to bridge Physics and History.",
+        "Developing the Rotor (Walzen) class with Ringstellung and Grundstellung logic."
       ]
     },
     "domain_context": {
@@ -67,6 +103,11 @@
       "physical_mirror": [
         "Rule 13: Mechanical Fidelity - Code must mirror physical execution sequence (e.g., step then encrypt).",
         "Rule 14: Component Autonomy - Rotors manage internal state; EnigmaMachine orchestrates."
+      ],
+      "physics_first_decoupling": [
+        "Rule 15: Virgin Mechanics - Domain Models must not hold historical IDs (e.g., 'ROTOR_I').",
+        "Rule 16: Address over Identity - Use SlotIndex for internal state and signal tracing.",
+        "Rule 17: Historical Twinning - Use the Extension Pattern in HistoricalTypes for ID-aware entities."
       ]
     },
     "operational_goals": [
@@ -76,12 +117,23 @@
       "Reject any implementation that violates the M3/M4 double-stepping mechanical fidelity."
     ],
     "metadata": {
-      "updated_at": "2026-03-29",
+      "updated_at": "2026-04-08",
       "known_issues": [
-        "Domain models deleted from previous iteration; awaiting clean implementation.",
-        "IRotor port requires refactor to align with new AlphabetIndex/Pin types."
+        "EntryWheel.ts requires refactor to remove historical EntryWheelID.",
+        "Rotor, Reflector, and Plugboard implementations are pending."
       ]
     }
+  },
+  "last_tasks.agent": {
+    "status": "completed",
+    "priority": "high",
+    "achievements": [
+      "Decoupled physical primitives (AlphabetIndex, Pin) from historical labels (RotorID).",
+      "Established the 'Extension Pattern' in HistoricalTypes.ts.",
+      "Formalized the Address-based Signal Trace in docs/design/observability_address_system.md.",
+      "Cleansed StateTypes.ts of historical leakage."
+    ],
+    "next_step": "Surgical refactor of EntryWheel.ts to remove EntryWheelID and align with PhysicsBlueprints.ts."
   },
   "ports.agent": null
 }

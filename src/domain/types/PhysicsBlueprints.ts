@@ -1,21 +1,12 @@
 /**
- * @file src/domain/types/ConfigurationTypes.ts
+ * @file src/domain/types/PhysicsBlueprints.ts
  */
-import type { 
-    RotorID, 
-    ScramblerWiring, 
-    NotchSet, 
-    AlphabetIndex, 
-    EntryWheelID, 
-    ReflectorID, 
-    MachineModelID 
-} from "./EnigmaTypes.js";
 
+import type { ScramblerWiring, NotchSet, AlphabetIndex, PlugboardPair } from "./PhysicsTypes.js";
 /**
  * Rotor Definition: The static blueprint for a physical rotor.
  */
-export interface RotorDefinition {
-    readonly id: RotorID;
+export interface RotorBlueprint {
     readonly wiring: ScramblerWiring;
     readonly notches: NotchSet;
 }
@@ -23,36 +14,28 @@ export interface RotorDefinition {
 /**
  * Reflector Definition: The static blueprint for an Umkehrwalze (UKW).
  */
-export interface ReflectorDefinition {
-    readonly id: ReflectorID;
+export interface ReflectorBlueprint {
     readonly wiring: ScramblerWiring;
 }
 
 /**
  * Entry Wheel Definition: The static blueprint for an Eintrittwalze (ETW).
  */
-export interface EntryWheelDefinition {
-    readonly id: EntryWheelID;
+export interface EntryWheelBlueprint {
     readonly wiring: ScramblerWiring;
 }
-
-/**
- * PlugboardPair: A utility type for a single reciprocal cable connection.
- */
-export type PlugboardPair = [AlphabetIndex, AlphabetIndex];
 
 /**
  * MachineSetup: The complete set of parameters for a daily configuration.
  * This is the primary contract used to instantiate an EnigmaMachine.
  */
-export interface MachineSetup {
-    readonly model: MachineModelID;
+export interface MachineBlueprint {
     /**
      * Walzenlage: The physical rotors in their slots, ordered from Left to Right.
      */
-    readonly walzenlage: RotorDefinition[];
-    readonly reflector: ReflectorDefinition;
-    readonly entryWheel: EntryWheelDefinition;
+    readonly walzenlage: RotorBlueprint[];
+    readonly reflector: ReflectorBlueprint;
+    readonly entryWheel: EntryWheelBlueprint;
     /**
      * Ringstellung: Fixed internal offsets for each rotor in the walzenlage.
      */
