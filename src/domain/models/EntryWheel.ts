@@ -4,9 +4,9 @@
 
 import { EnigmaChar } from "./EnigmaChar.js";
 import { Pin } from "./Pin.js";
-import type { EntryWheelID } from "../types/HistoricalTypes.js";
 import type { ScramblerWiring, AlphabetIndex } from "../types/PhysicsTypes.js";
-import type { EntryWheelDefinition } from "../types/PhysicsBlueprints.js";
+import type { EntryWheelBlueprint } from "../types/PhysicsBlueprints.js";
+
 /**
  * The Entry Wheel (Eintrittswalze or ETW)
  * 
@@ -23,22 +23,20 @@ import type { EntryWheelDefinition } from "../types/PhysicsBlueprints.js";
  * - It has NO notches: It never triggers another component to step.
  */
 export class EntryWheel {
-    private readonly _id: EntryWheelID;
     private readonly _wiring: ScramblerWiring;
 
-    private constructor(id: EntryWheelID, wiring: ScramblerWiring) {
-        this._id = id;
+    private constructor(wiring: ScramblerWiring) {
         this._wiring = wiring;
     }
 
     /**
-     * Static Factory: Creates a new Entry Wheel instance from a definition.
+     * Static Factory: Creates a new Entry Wheel instance from a blueprint.
      * 
-     * @param definition - The historical blueprint (EntryWheelDefinition).
+     * @param blueprint - The physical blueprint (EntryWheelBlueprint).
      * @returns A validated EntryWheel instance.
      */
-    public static create(definition: EntryWheelDefinition): EntryWheel {
-        const { id, wiring } = definition;
+    public static create(blueprint: EntryWheelBlueprint): EntryWheel {
+        const { wiring } = blueprint;
 
         // Validation: Must be 26 elements
         if (wiring.length !== 26) {
@@ -57,7 +55,7 @@ export class EntryWheel {
             seen.add(index);
         }
 
-        return new EntryWheel(id, wiring);
+        return new EntryWheel(wiring);
     }
 
     /**
