@@ -1,5 +1,5 @@
 import type { Pin } from "../models/Pin.js";
-import type { AlphabetIndex, ScramblerWiring } from "../types/EnigmaTypes.js";
+import type { AlphabetIndex, ScramblerWiring } from "../types/PhysicsTypes.js";
 
 /**
  * @file src/domain/services/IScramblerPhysics.ts

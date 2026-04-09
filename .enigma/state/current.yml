@@ -1,29 +1,8 @@
-# Enigma Engine: Implementation Progress & Task Tracker
-# Updated: 2026-04-08 (Architecture Refactor)
-
-metadata:
-  last_updated: 2026-04-08
-  focus: "Physics-First Decoupling Complete in Type Layer"
-
-tasks:
-  - id: 1
-    title: "Type Layer Refactor (Decoupling)"
-    status: "COMPLETED"
-    file: "src/domain/types/*"
-    notes: "Split into PhysicsTypes.ts, HistoricalTypes.ts, PhysicsBlueprints.ts."
-
-  - id: 2
-    title: "Observability Refactor"
-    status: "COMPLETED"
-    file: "src/domain/types/ObservabilityTypes.ts"
-    notes: "Implemented Discriminated Union for ComponentAddress using SlotIndex."
-
-  - id: 3
-    title: "State Layer Refactor"
-    status: "COMPLETED"
-    file: "src/domain/types/StateTypes.ts"
-    notes: "Removed historical IDs from RotorState; added SlotIndex."
-
-current_context:
-  active_component: "Domain Model Cleansing"
-  next_step: "Refactor EntryWheel.ts to remove historical ID dependency."
+last_updated: 2026-04-09
+current_task: "Virgin Rotor (Walzen) Implementation"
+status: "PENDING"
+notes: "Need to implement Ringstellung, Grundstellung, and stepping logic (mechanical fidelity)."
+completed_today:
+  - "Refactored EntryWheel.ts to be ID-agnostic (Virgin)."
+  - "Corrected EntryWheel.test.ts to use EntryWheelBlueprint."
+  - "Verified EntryWheel tests pass."
