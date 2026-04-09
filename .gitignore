@@ -82,3 +82,4 @@ Thumbs.db
 # agents and scripts
 .agents/
 .scripts/
+.enigma/
