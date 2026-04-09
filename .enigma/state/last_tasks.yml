@@ -1,0 +1,13 @@
+# Last Task: Physics-First Type Architecture
+# Role: Ensuring the "Code of Law" is enforced at the type level.
+
+status: completed
+priority: high
+
+achievements:
+  - Decoupled physical primitives (AlphabetIndex, Pin) from historical labels (RotorID).
+  - Established the 'Extension Pattern' in HistoricalTypes.ts.
+  - Formalized the Address-based Signal Trace in docs/design/observability_address_system.md.
+  - Cleansed StateTypes.ts of historical leakage.
+
+next_step: "Surgical refactor of EntryWheel.ts to remove EntryWheelID and align with PhysicsBlueprints.ts."
